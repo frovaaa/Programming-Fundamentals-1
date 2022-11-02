@@ -4,9 +4,6 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
-; Note: In this code I used appState and app-state to indicate a constant (or input) of type Structure app-state.
-
-
 ; ########## Canvas #########
 ; The canvas is an IMAGE made by the use of the rectangle function of Racket, with a width, heigth and color.
 ; This will be our background/canvas of the application
@@ -14,18 +11,12 @@
 ; ###########################
 
 ; ########## line-points ##########
-; Data types;(define (start-drawing appState x-mouse y-mouse)
-;  ... app-state-drawingCanvas ...
-;  ... x-mouse ...
-;  ... y-mouse ...
-;  ... app-state-quit...
-;  ... app-state-Maybe<Line> ...
-;  )
-; a line-points is a Struct that contains:
-;             - startPoint : posn (x,y) values
-;             - endPoint   : posn (x,y) values
+; Data types
+; a LinePoints is a Struct that contains:
+;             - startPoint : Posn (x,y) values
+;             - endPoint   : Posn (x,y) values
 ;             - pen        : racket-default Pen which contains the color and type of line
-; A line-points is a Struct that contains 2 posn (x,y positions) and a PEN constant (racket default type for PEN, that contains colors and sizes)
+; A line-points is a Struct that contains 2 Posn (x,y positions) and a PEN constant (racket default type for PEN, that contains colors and sizes)
 
 ; Header of struct
 (define-struct line-points [startPoint endPoint pen])
@@ -56,7 +47,7 @@
 ; #################################
 
 ; ########## AppState #############
-; An app-state is a Structure with the following elements:
+; An AppState is a Structure with the following elements:
 ;            drawingCanvas: Image with eventually the lines added to it. (Background + lines)
 ;            Maybe<Line>  :
 ;                       - Line
@@ -64,7 +55,7 @@
 ;            quit         : Boolean value that indicates if the application has been stopped or not (with the key 'q')
 ;                       - #true -> Application will quit
 ;                       - #false -> Application is running
-; The app-state (or appState) is the constant that keeps track of everything happening in the drawing application,
+; The AppState is the constant that keeps track of everything happening in the drawing application,
 ; it's like a screenshot of the situation in a given moment, those moments can differ by having a line drawn,
 ; canceling the placing of a line on top of the drawingCanvas, quitting the application.
 
@@ -79,14 +70,14 @@
 
 ; ################ IS THE APPSTATE Maybe<Line> A LINE or BOOLEAN? ########
 ; Data types
-; app-state : Defined before
+; AppState : Defined before
 
 ; Interpretation
 ; The function isBooleanMaybe<Line>? is a checker function that takes as input
-; the appState and check if the Maybe<Line> in it is not present (boolean value (#false))
+; the AppState and check if the Maybe<Line> in it is not present (boolean value (#false))
 
 ; Input/Output
-; isBooleanMaybe<Line>? : app-state -> Boolean
+; isBooleanMaybe<Line>? : AppState -> Boolean
 
 ; Header
 ;(define (isBooleanMaybe<Line>? appState) #true)
@@ -107,7 +98,7 @@
 
 ; ################ ADD LINE OF APPSTATE TO APPSTATE-CANVAS ###############
 ; Data types
-; This function takes as input an app-state (defined before)
+; This function takes as input an AppState (defined before)
 
 ; Intepretation
 ; This function will take an app-state as input, take the Maybe<Line> (corresponding to a Line)
@@ -115,10 +106,10 @@
 ; the line to the drawingCanvas of the app-state
 
 ; Input/Output
-; add-line-to-canvas : app-state -> app-state
+; add-line-to-canvas : AppState -> AppState
 
 ; Header
-; (define (add-line-to-canvas appState) app-state)
+; (define (add-line-to-canvas appState) APPSTATE3)
 
 ; Examples
 (check-expect (add-line-to-canvas APPSTATE1) (make-app-state (add-line (app-state-drawingCanvas APPSTATE1) 40 75 95 150 PEN1) #false #false))
@@ -155,21 +146,21 @@
 
 ; Intepretation
 ; This function has the objective of drawing/showing the current canvas/background that is
-; stored inside the appState given as input. This function is used by the Big Bang function.
+; stored inside the AppState given as input. This function is used by the big-bang function.
 ; The function draw will add (if present) the current line to the canvas temporarly, to show were the
 ; line will be placed if the user decides to confirm it's creation and then show the updated canvas.
 ; This function is used by the Big Bang function
 
 ; Input/Output
-; draw : app-state -> Image
+; draw : AppState -> Image
 
 ; Header
 ; (define (draw appState) CANVAS)
 
 ; Examples
-(check-expect (draw APPSTATE1) (app-state-drawingCanvas (add-line-to-canvas APPSTATE1))) ; app-state with Maybe<Line> set to a Line
-(check-expect (draw APPSTATE2) (app-state-drawingCanvas (add-line-to-canvas APPSTATE2))) ; app-state with Maybe<Line> set to a Line
-(check-expect (draw APPSTATE3) (app-state-drawingCanvas APPSTATE3))                      ; app-state with Maybe<Line> set to #false
+(check-expect (draw APPSTATE1) (app-state-drawingCanvas (add-line-to-canvas APPSTATE1))) ; AppState with Maybe<Line> set to a LinePoints
+(check-expect (draw APPSTATE2) (app-state-drawingCanvas (add-line-to-canvas APPSTATE2))) ; AppState with Maybe<Line> set to a LinePoints
+(check-expect (draw APPSTATE3) (app-state-drawingCanvas APPSTATE3))                      ; AppState with Maybe<Line> set to #false
 
 ; Template
 ;(define (draw appState)
@@ -190,16 +181,16 @@
 
 ; ############## START DRAWING ##############
 ; Data types
-; app-state has been defined before
+; AppState has been defined before
 ; x-mouse : Number - x position of the mouse
 ; y-mouse : Number - y position of the mouse
 
 ; Intepretation
-; The function start-drawing is used to set as Line the Maybe<Line> of the given app-state,
-; in the Line there will be set the start and end position as the current mouse coordinates
+; The function start-drawing is used to set as Line the Maybe<Line> of the given AppState,
+; in the LinePoints there will be set the start and end position as the current mouse coordinates
 
 ; Input/Output
-; start-drawing : app-state Number Number -> app-state
+; start-drawing : AppState Number Number -> AppState
 
 ; Header
 ; (define (start-drawing appState x-mouse y-mouse) APPSTATE3)
@@ -228,22 +219,22 @@
 
 ; ############## CHANGE APPSTATE ENDLINE ##############
 ; Data types
-; app-state defined before
+; AppState defined before
 ; x-mouse : Number representing the X current coordinate of the mouse
 ; y-mouse : Number representing the X current coordinate of the mouse
 
 ; Intepretation
 ; The move-end function is used to change the endline position of the Maybe<Line> in the given
-; app-state with the given x and y coordinates
+; AppState with the given x and y coordinates
 
 ; Input/Output
-; move-end : app-state Number Number -> app-state
+; move-end : AppState Number Number -> AppState
 
 ; Header
 ; (define (move-end appState x-mouse y-mouse) APPSTATE1)
 
 ; Examples
-(check-expect (move-end APPSTATE1 300 250)           ; APPSTATE with a Maybe<Line> as Line
+(check-expect (move-end APPSTATE1 300 250)           ; APPSTATE with a Maybe<Line> as LinePoints
               (make-app-state
                (app-state-drawingCanvas APPSTATE1)
                (make-line-points
@@ -256,7 +247,7 @@
                 (line-points-pen (app-state-Maybe<Line> APPSTATE1)))
                (app-state-quit APPSTATE1)
                ))
-(check-expect (move-end APPSTATE3 300 250) APPSTATE3) ; APPSTATE with Maybe<Line> as #false
+(check-expect (move-end APPSTATE3 300 250) APPSTATE3) ; AppState with Maybe<Line> as #false
 
 ; Template
 ;(define (move-end appState x-mouse y-mouse)
@@ -286,7 +277,7 @@
 
 ; ############## MOUSE HANDLER ###############
 ; Data types
-; app-state   : Defined before
+; AppState    : Defined before
 ; x-mouse     : Number - x value of the mouse position
 ; y-mouse     : Number - y value of the mouse position
 ; mouse-event : string value (racket set of strings)
@@ -302,16 +293,16 @@
 ; This function is used by the Big Bang function
 
 ; Input/Output
-; handle-mouse : app-state x-mouse y-mouse mouse-event -> app-state
+; handle-mouse : app-state x-mouse y-mouse mouse-event -> AppState
 
 ; Header
-; (define (handle-mouse appState x-mouse y-mouse mouse-event) app-state)
+; (define (handle-mouse appState x-mouse y-mouse mouse-event) APPSTATE1)
 
 ; Examples
-(check-expect (handle-mouse APPSTATE3 125 32 "button-down") (start-drawing APPSTATE3 125 32))                            ; appState with #false as Maybe<Line> starting to draw
-(check-expect (handle-mouse APPSTATE1 125 32 "drag") (move-end APPSTATE1 125 32))                         ; appState with Line as Maybe<Line> drawing
-(check-expect (handle-mouse APPSTATE3 125 32 "drag") APPSTATE3)                                                          ; appState with #false as Maybe<Line> drawing (canceled)
-(check-expect (handle-mouse APPSTATE1 125 32 "button-up") (add-line-to-canvas (move-end APPSTATE1 125 32))); appState with Line as Maybe<Line> ending the drawing
+(check-expect (handle-mouse APPSTATE3 125 32 "button-down") (start-drawing APPSTATE3 125 32))                            ; AppState with Maybe<Line> as #false starting to draw
+(check-expect (handle-mouse APPSTATE1 125 32 "drag") (move-end APPSTATE1 125 32))                         ; AppState with Maybe<Line> as LinePoints drawing
+(check-expect (handle-mouse APPSTATE3 125 32 "drag") APPSTATE3)                                                          ; AppState with Maybe<Line> as #false drawing (canceled)
+(check-expect (handle-mouse APPSTATE1 125 32 "button-up") (add-line-to-canvas (move-end APPSTATE1 125 32))); AppState with Maybe<Line> as LinePoints ending the drawing
 
 ; Template
 ;(define (handle-mouse appState x-mouse y-mouse mouse-event)
@@ -342,7 +333,7 @@
 ; based on the boolean value quit of the app-state given as input
 
 ; Input/Output
-; quit? : app-state -> Boolean
+; quit? : AppState -> Boolean
 
 ; Header
 ; (define (quit? appState) #true)
@@ -359,19 +350,19 @@
 ; Code
 
 (define (quit? appState)
-  (if (app-state-quit appState) #true #false))
+  (if (app-state-quit appState) #true #false)) ; We could check with a comparison if it's true or not, but it's not necessary
 
 ; ###############################
 ; ######### CANCEL LINE #########
 ; Data Types
-; app-state: Defined before
+; AppState: Defined before
 
 ; Interpretation
-; This function takes an app-state and change the Maybe<Line? to #false if it is set to a Line
-; It's called when we press 'escape' while drawing a new Line
+; This function takes an AppState and change the Maybe<Line? to #false if it is set to a LinePoints
+; It's called when we press 'escape' while drawing a new line
 
 ; Input/Output
-; cancel-line : app-state -> app-state
+; cancel-line : AppState -> AppState
 
 ; Header
 ;(define (cancel-line appState) APPSTATE1)
@@ -392,13 +383,13 @@
 
 ; ############# QUIT ############
 ; Data types
-; app-state : Defined before
+; AppState : Defined before
 
 ; Intepretation
-; This function sets to #true the value of quit inside the given app-state
+; This function sets to #true the value of quit inside the given AppState
 
 ; Input/Output
-; quit : app-state -> app-state
+; quit : AppState -> AppState
 
 ; Header
 ;(define (quit appState) APPSTATE1)
@@ -420,7 +411,7 @@
 
 ; ######### KEY HANDLER #########
 ; Data types
-; app-state   : defined before
+; AppState   : defined before
 ; key-pressed : String (rappresenting the key pressed)
 
 ; Intepretation
@@ -430,7 +421,7 @@
 ;                                          - escape -> Cancel the current line drawing
 
 ; Input/Output
-; handle-key : app-state key-pressed -> app-state
+; handle-key : AppState key-pressed -> AppState
 
 ; Header
 ; (define (handle-key appState key-pressed) APPSTATE3)
@@ -463,14 +454,14 @@
 
 ; ######## BIG BANG#######
 ; Data types
-; initial-state : app-state
+; initial-state : AppState
 
 ; Intepretation
-; The drawing-app function uses the Big Bang function that is predefine in racket, it takes a WorldState (in this case app-state) and
+; The drawing-app function uses the big-bang function that is predefine in racket, it takes a WorldState (in this case AppState) and
 ; handles the various handlers to start and execute the drawing application
 
 ; Input/Output
-; drawing-app : app-state -> app-state
+; drawing-app : AppState -> AppState
 
 ; Header
 ;(define (drawing-app initial-state) APPSTATE3)
@@ -499,7 +490,7 @@
 
 ; I want that when I press 1 2 or 3 the color of the line currently drawn changes,
 ; the initial idea was to select first a color and then the following lines would be of that color, but to achieve that I should make an important change in the recipe
-; of app-state that would reflect in changes in all the code (adding a new constant with the PEN value) Instead I'm going to use the PEN constant in the Maybe<Line> that
+; of AppState that would reflect in changes in all the code (adding a new constant with the PEN value) Instead I'm going to use the PEN constant in the Maybe<Line> that
 ; I already implemented.
 ; By doing that only the current drawing line will be affected.
 ; To achieve this I need to add some handlers in the key-handler and call a new Enumerator function to retreive the new PEN
@@ -563,13 +554,13 @@
 ; ############### CHANGE PEN ###############
 ; Data types
 ; a Pen is a Racket default data type explained before
-; an app-state has been defined before
+; an AppState has been defined before
 
 ; Interpretation
 ; This function takes an app-state and changes the current pen of the app-state-Maybe<Line> to the new pen in input
 
 ; Input/Output
-; change-pen : app-state pen -> app-state
+; change-pen : AppState pen -> AppState
 
 ; Header
 ;(define (change-pen appState pen) APPSTATE1)
