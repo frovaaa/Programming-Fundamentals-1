@@ -1,0 +1,126 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname Frova_Davide_PF1_Assignment5) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; ############ 2.1 Programming with lists ###########
+
+; Exs. 1
+; Design a function add-5 that takes a list of numbers and adds 5 to each of them.
+
+; Data Types:
+; a List<Number> is one of:
+;  - '()                        ; Empty list
+;  - (cons Number List<Number>)  ; NonEmpty List
+; A list with inside an undefined number of Numbers
+
+; Data Examples
+; LON = List Of Numbers
+(define LON1 '())
+(define LON2 (list 3 5 7))
+(define LON3 (list -5 15 3))
+
+; Intepretation:
+; Function that takes a list with n numbers inside and adds 5 to each of them
+
+; Input / Output:
+; add-5 : List<Number> -> List<Number>
+
+; Header:
+;(define (add-5 lon) LON1)
+
+; Examples:
+(check-expect (add-5 LON1) '())
+(check-expect (add-5 LON2) (list 8 10 12))
+(check-expect (add-5 LON3) (list 0 20 8))
+
+; Template:
+;(define (add-5 lon)
+;  (cond
+;    [(empty? lon) ...]
+;    [else
+;     (first lon)
+;     (rest lon)
+;     (add-5 (rest lon)) ...]))
+
+; Code:
+(define (add-5 lon)
+  (cond
+    [(empty? lon) '()]
+    [else
+     (cons (+ (first lon) 5) (add-5 (rest lon)))]))
+
+
+; Exs. 2
+
+#|
+Design a function add-title that takes a list of person names and a string
+representing a title, and returns a list of the input names with the title added
+as a prefix of every name.
+For example, given the names "Strange", "Foster", and "Frankenstein" and the title "Dr.",
+it outputs the strings "Dr. Strange", "Dr. Foster", and "Dr. Frankenstein".
+|#
+
+
+; Data Types:
+; a List<String> is one of:
+;  - '()                        ; Empty list
+;  - (cons String List<String>  ; NonEmpty List
+; A list with inside some persons names (Strings)
+
+; Data Examples
+
+; Intepretation:
+; Takes a List<String> and a Prefix and returns the names with the prefix added.
+
+; Input / Output:
+; add-title : List<String> String
+
+; Header:
+
+; Examples:
+
+; Template:
+
+
+; Code:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+; Data Types:
+
+; Intepretation:
+
+; Input / Output:
+
+; Header:
+
+; Examples:
+
+; Template:
+
+; Code:
